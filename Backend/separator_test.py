@@ -23,7 +23,10 @@ def download_and_separate_audio():
 
     input_file = './downloaded_audio/download.wav'
 
-    separator = Separator()
+    title = title.replace(' ', '_').replace('/', '_')
+    print(title)
+
+    separator = Separator(output_dir = f'./separated_audio/{title}',)
 
     output_file = {
         "Vocals": f'(Vocals)_{title}',
