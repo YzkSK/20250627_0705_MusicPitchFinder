@@ -27,10 +27,10 @@ def download_and_separate_audio():
 
     output_file = {
         "Vocals": f'(Vocals)_{title}',
-        "Instrumental": f'(Inst)_{title}',
+        "Other": f'(Inst)_{title}',
     }
 
-    separator.load_model()
+    separator.load_model(model_filename='vocals_mel_band_roformer.ckpt')
     output_file = separator.separate(input_file, output_file)
 
     return output_file
