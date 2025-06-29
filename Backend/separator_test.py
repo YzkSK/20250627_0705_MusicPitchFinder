@@ -26,11 +26,10 @@ def download_and_separate_audio():
     title = title.replace(' ', '_').replace('/', '_')
     print(title)
 
-    separator = Separator(output_dir = f'./separated_audio/{title}',)
+    separator = Separator(output_dir = f'./separated_audio/{title}', output_single_stem="Vocals")
 
     output_file = {
         "Vocals": f'(Vocals)_{title}',
-        "Other": f'(Inst)_{title}',
     }
 
     separator.load_model(model_filename='vocals_mel_band_roformer.ckpt')
