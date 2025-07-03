@@ -30,29 +30,30 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <br></br>
+    <div className="border centering_parent centering_item">
+      <h1 className="font">Register</h1>
       {message && <span>{message}</span>}
-      <form onSubmit={handleSubmit}>
-        <input
+      <form onSubmit={handleSubmit} >
+        <div className="flex">
+        <input className="margin"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           type="email"
           placeholder="Email"
           required
         />
-        <input
+        <input className="margin"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           type="password"
           placeholder="Password"
           required
         />
-        <button type="submit">Create Account</button>
+        <button type="submit" className="margin button">Create Account</button>
+        </div>
       </form>
       <span>Already have an account?</span>
-      <Link to="/login">Log in.</Link>
+      <Link to="/login" className="color">Log in.</Link>
     </div>
   );
 }
