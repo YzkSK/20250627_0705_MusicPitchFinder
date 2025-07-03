@@ -33,7 +33,7 @@ function Login() {
 
   return (
     <div className="border centering_parent centering_item">
-      <h1 className="font">Login</h1>
+      <h1 className="title">Login</h1>
       {message && <span>{message}</span>}
       <form onSubmit={handleSubmit}>
         <div className="flex">
