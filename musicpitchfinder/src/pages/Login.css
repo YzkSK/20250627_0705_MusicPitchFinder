@@ -36,13 +36,23 @@
     align-items: center;
 }
 
-button{
+.button{
     border: 1px solid #6662df;
-    padding: 10px 15px;
+    padding:10px 20px;
     cursor: pointer;
     border-radius: 30px;
+    color: black;
 }
 
 .color{
     color: #6662df;
+}
+
+.button_hover{
+    border: 1px solid #6662df;
+    padding:10px 20px;
+    margin:0 10px auto;
+    cursor: pointer;
+    border-radius: 30px;
+    color: black;
 }

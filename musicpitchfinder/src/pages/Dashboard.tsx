@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { User } from "@supabase/supabase-js";
 import "./Dashboard.css";
-import Header from "./Header.tsx";
+import  "./Header.css";
+import "./Login.css";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -45,79 +47,93 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return (
-      <div>
-        {error ? (
-          <div>Error: {error.message}. Please log in.</div>
-        ) : (
-          <div>Please log in to access the dashboard.</div>
-        )}
-      </div>
-    );
-  }
-
-  const signOut = async () => {
-    try {
-      const { error: signOutError } = await supabase.auth.signOut();
-      if (signOutError) throw signOutError;
-      navigate("/login");
-    } catch (err) {
-      console.error("サインアウト中にエラーが発生しました:", err);
-      setError(err);
+    if (loading) {
+      return <div>Loading...</div>;
     }
-  };
-
-  return (
-    <div>
-      <div className="border centering_parent centering_item">
-        <Header />
-        <h1 className="font">Dashboard</h1>
-        <h2>Welcome, {user.email}</h2>
-      </div>
-      <div>
-        <button className="regbutton" onClick={signOut} >Sign out</button>
-      </div>
-      <div>
-        {error ? (
-          <div>Error: {error.message}</div>
-        ) : musicData.length > 0 ? (
-          <table　className="list">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Original URL</th>
-                <th>Cover URL</th>
-                <th>High Pitch</th>
-                <th>Low Pitch</th>
-                <th>Optimal Pitch</th>
-                <th>Comparison Pitch</th>
-              </tr>
-            </thead>
-            <tbody>
-              {musicData.map((musicItem) => (
-                <tr key={musicItem.id}>
-                  <td>{musicItem.title}</td>
-                  <td className="link"><a href={musicItem.original_url}><span>Original</span></a></td>
-                  <td className="link"><a href={musicItem.cover_url}>Cover</a></td>
-                  <td>{musicItem.high_pitch}</td>
-                  <td>{musicItem.low_pitch}</td>
-                  <td>{musicItem.optimal_pitch}</td>
-                  <td>{musicItem.comparison_pitch}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div>No music data found for this user.</div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default Dashboard;
+  
+    if (!user) {
+      return (
+        <div>
+          {error ? (
+            <div>Error: {error.message}. Please log in.</div>
+          ) : (
+            <div>Please log in to access the dashboard.</div>
+          )}
+        </div>
+      );
+    }
+  
+    const signOut = async () => {
+      try {
+        const { error: signOutError } = await supabase.auth.signOut();
+        if (signOutError) throw signOutError;
+        navigate("/login");
+      } catch (err) {
+        console.error("サインアウト中にエラーが発生しました:", err);
+        setError(err);
+      }
+    };
+    const Header: React.FC = () => {
+      return (
+        <>
+          <header className="header">
+            <h1>Music Pitch Finder</h1>
+            <nav className="flex_container">
+              <ul className="nav-links">
+                 <li>Music Pitch Finder</li>
+                <li>
+                  <Link to="/menu"><button className="button_hover">➕</button></Link>
+                </li>
+                <li>
+                  <Link to="/locations"><button className="button_hover">🎶</button></Link>
+                </li>
+                <li>
+                  <button onClick={signOut} className="button_hover">Sign out</button>
+                </li>
+              </ul>
+            </nav>
+          </header>
+          <div>
+            <div>
+              {error ? (
+                <div>Error: {error.message}</div>
+              ) : musicData.length > 0 ? (
+                <table className="list">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Original URL</th>
+                      <th>Cover URL</th>
+                      <th>High Pitch</th>
+                      <th>Low Pitch</th>
+                      <th>Optimal Pitch</th>
+                      <th>Comparison Pitch</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {musicData.map((musicItem) => (
+                      <tr key={musicItem.id}>
+                        <td>{musicItem.title}</td>
+                        <td className="link"><a href={musicItem.original_url}><span>Original</span></a></td>
+                        <td className="link"><a href={musicItem.cover_url}>Cover</a></td>
+                        <td>{musicItem.high_pitch}</td>
+                        <td>{musicItem.low_pitch}</td>
+                        <td>{musicItem.optimal_pitch}</td>
+                        <td>{musicItem.comparison_pitch}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div>No music data found for this user.</div>
+              )}
+            </div>
+          </div>
+        </>
+      );
+    }
+  
+    return <Header />;
+  }
+  
+  export default Dashboard;
