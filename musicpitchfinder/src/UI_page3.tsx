@@ -23,6 +23,7 @@ const App: React.FC = () => {
   };
 
   return (
+    <div className="app">
     <div className="app-container">
       <div className="keyboard-wrapper">
         <div className="scroll-content">
@@ -55,6 +56,7 @@ const App: React.FC = () => {
         <button className="action-button">最低音</button>
         <button className="action-button">最高音</button>
       </div>
+    </div>
     </div>
   );
 };
