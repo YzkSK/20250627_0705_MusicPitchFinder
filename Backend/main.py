@@ -10,6 +10,14 @@ import math
 import re
 from scipy import stats
 from yt_dlp import YoutubeDL
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
+class AudioUrls(BaseModel):
+    original_url: str
+    cover_url: str
+    user_high_note: Union[str, None] = None
+    user_low_note: Union[str, None] = None
 
 def my_round_int(number):
     return int((number * 2 + 1) // 2)
@@ -153,20 +161,34 @@ def analyze_audio_note(url):
 
 app = FastAPI()
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/separate")
-def result_separete_audio(original_url: str, cover_url: str, user_high_note: Union[str, None] = None, user_low_note: Union[str, None] = None):
-    original_results = analyze_audio_note(original_url)
-    cover_results = analyze_audio_note(cover_url)
+@app.post("/separate")
+def result_separete_audio(urls: AudioUrls):
+    original_results = analyze_audio_note(urls.original_url)
+    cover_results = analyze_audio_note(urls.cover_url)
 
-    if user_high_note is None and user_low_note is None:
+    if urls.user_high_note is None and urls.user_low_note is None:
         pass
     else:
-        user_max_midi = note_name_to_midi(user_high_note)
-        user_min_midi = note_name_to_midi(user_low_note)
+        user_max_midi = note_name_to_midi(urls.user_high_note)
+        user_min_midi = note_name_to_midi(urls.user_low_note)
 
         original_max_midi = note_name_to_midi(original_results["max_note"])
         original_min_midi = note_name_to_midi(original_results["min_note"])
