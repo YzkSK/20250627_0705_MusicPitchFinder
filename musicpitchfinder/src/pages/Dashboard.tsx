@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { User } from "@supabase/supabase-js";
 import "./Dashboard.css";
-import  "./Header.css";
-import "./Login.css";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
@@ -77,10 +75,9 @@ function Dashboard() {
       return (
         <>
           <header className="header">
-            <h1>Music Pitch Finder</h1>
+            <h1 className="bold">Music Pitch Finder</h1>
             <nav className="flex_container">
               <ul className="nav-links">
-                 <li>Music Pitch Finder</li>
                 <li>
                   <Link to="/menu"><button className="button_hover">➕</button></Link>
                 </li>
