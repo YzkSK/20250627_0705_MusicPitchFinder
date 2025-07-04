@@ -65,3 +65,8 @@ table th,table td{
   display: flex;
   align-items: center;
 }
+
+.main_container {
+  padding: 20px;
+  margin-top: 80px; 
+}

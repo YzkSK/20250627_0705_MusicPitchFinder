@@ -1,9 +1,8 @@
 import { supabase } from "../supabase";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { User } from "@supabase/supabase-js";
 import "./Dashboard.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -65,7 +64,7 @@ function Dashboard() {
       try {
         const { error: signOutError } = await supabase.auth.signOut();
         if (signOutError) throw signOutError;
-        navigate("/login");
+        navigate("/");
       } catch (err) {
         console.error("サインアウト中にエラーが発生しました:", err);
         setError(err);
@@ -75,14 +74,14 @@ function Dashboard() {
       return (
         <>
           <header className="header">
-            <h1 className="bold">Music Pitch Finder</h1>
+            <Link to="/dashboard"><h1 className="bold">Music Pitch Finder</h1></Link>
             <nav className="flex_container">
               <ul className="nav-links">
                 <li>
-                  <Link to="/menu"><button className="button_hover">➕</button></Link>
+                  <Link to="/UI_page2"><button className="button_hover">➕</button></Link>
                 </li>
                 <li>
-                  <Link to="/locations"><button className="button_hover">🎶</button></Link>
+                  <Link to="/UI_page3"><button className="button_hover">🎶</button></Link>
                 </li>
                 <li>
                   <button onClick={signOut} className="button_hover">Sign out</button>
@@ -90,7 +89,7 @@ function Dashboard() {
               </ul>
             </nav>
           </header>
-          <div>
+          <div className="main_container">
             <div>
               {error ? (
                 <div>Error: {error.message}</div>
