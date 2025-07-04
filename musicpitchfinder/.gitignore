@@ -12,7 +12,8 @@ dist
 dist-ssr
 *.local
 
-separator_test.py
+separator_test.py*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
