@@ -1,67 +1,102 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "./supabase";
 import * as Tone from 'tone';
 import './UI_page3.css';
 
-const App: React.FC = () => {
+export default function UI_page3() {
+  const navigate = useNavigate()
+  const [error, setError] = useState<any>(null);
 
-  const synth = useRef<Tone.Synth | null>(null);
-
-  useEffect(() => {
-    synth.current = new Tone.Synth().toDestination();
-
-    return () => {
-      synth.current?.dispose();
-    };
-  }, []); //空の配列渡して、マウントされたときにTone.jsのシンセを初期化
-
-  const handleKeyDown = async (note: string) => {
-    if (!synth.current) return;
-
-    await Tone.start();
-
-    synth.current.triggerAttackRelease(note, "8n");
+  const signOut = async () => {
+    try {
+      const { error: signOutError } = await supabase.auth.signOut();
+      if (signOutError) throw signOutError;
+      navigate("/");
+    } catch (err) {
+      console.error("サインアウト中にエラーが発生しました:", err);
+      setError(err);
+    }
   };
 
-  return (
-    <div className="app">
-    <div className="app-container">
-      <div className="keyboard-wrapper">
-        <div className="scroll-content">
-          <div className="keyboard-container">
-            {fullKeyboard.map((key, index) => (
-              <div
-                key={key.octaveNoteName}
-                className={`key ${key.type}-key`}
-                style={getKeyStyle(index)}
-                onMouseDown={() => handleKeyDown(key.octaveNoteName)}
-              >
-                <span className="key-name">{key.note}</span>
+  const Header: React.FC = () => {
+
+    const synth = useRef<Tone.Synth | null>(null);
+
+    useEffect(() => {
+      synth.current = new Tone.Synth().toDestination();
+
+      return () => {
+        synth.current?.dispose();
+      };
+    }, []); //空の配列渡して、マウントされたときにTone.jsのシンセを初期化
+
+    const handleKeyDown = async (note: string) => {
+      if (!synth.current) return;
+
+      await Tone.start();
+
+      synth.current.triggerAttackRelease(note, "8n");
+    };
+
+    return (
+      <>
+        <header className="header">
+          <Link to="/dashboard"><h1 className="bold">Music Pitch Finder</h1></Link>
+            <nav className="flex_container">
+              <ul className="nav-links">
+                <li>
+                  <Link to="/UI_page2"><button className="button_hover">➕</button></Link>
+                </li>
+                <li>
+                  <Link to="/UI_page3"><button className="button_hover">🎶</button></Link>
+                </li>
+                <li>
+                  <button onClick={signOut} className="button_hover">Sign out</button>
+                </li>
+              </ul>
+            </nav>
+        </header>
+        <div className='main_container'>
+          <div className="app-container">
+            <div className="keyboard-wrapper">
+              <div className="scroll-content">
+                <div className="keyboard-container">
+                  {fullKeyboard.map((key, index) => (
+                    <div
+                      key={key.octaveNoteName}
+                      className={`key ${key.type}-key`}
+                      style={getKeyStyle(index)}
+                      onMouseDown={() => handleKeyDown(key.octaveNoteName)}
+                    >
+                      <span className="key-name">{key.note}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="range-bar-container">
+                  {octaveRanges.map(octave => (
+                    <div
+                      key={octave.name}
+                      className={`range-segment ${octave.name}`}
+                      style={{ width: `${OCTAVE_WIDTH}px` }}
+                    >
+                      {octave.name}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-          <div className="range-bar-container">
-            {octaveRanges.map(octave => (
-              <div
-                key={octave.name}
-                className={`range-segment ${octave.name}`}
-                style={{ width: `${OCTAVE_WIDTH}px` }}
-              >
-                {octave.name}
-              </div>
-            ))}
+            </div>
+            <div className="action-buttons">
+              <button className="action-button">最低音</button>
+              <button className="action-button">最高音</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="action-buttons">
-        <button className="action-button">最低音</button>
-        <button className="action-button">最高音</button>
-      </div>
-    </div>
-    </div>
-  );
-};
-
-export default App;
+      </>
+    );
+  };
+  return <Header />;
+}
 
 interface KeyInfo {
   note: string; type: 'white' | 'black'; octave: string; octaveNoteName: string;
