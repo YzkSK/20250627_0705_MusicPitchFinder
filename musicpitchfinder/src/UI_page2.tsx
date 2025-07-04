@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import './UI_page2.css';
-
+import { supabase } from "./supabase";
+import { Link, useNavigate } from "react-router-dom";
 interface FileInputBoxProps {
   title: string;
   onFileSelect: (file: File) => void;
@@ -79,7 +80,9 @@ const FileInputBox: React.FC<FileInputBoxProps> = ({ title, onFileSelect }) => {
 };
 
 
-export default function App() {
+export default function UI_page2() {
+  const navigate = useNavigate();
+  const [error, setError] = useState<any>(null);
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
 
@@ -93,28 +96,61 @@ export default function App() {
     setCoverFile(file);
   };
 
-  return (
-    <div className="app-container">
-      <div className="main-content">
-        <div className="inputs-grid">
-          <FileInputBox title="原曲" onFileSelect={handleOriginalFile} />
-          <FileInputBox title="カバー楽曲" onFileSelect={handleCoverFile} />
-        </div>
+  const signOut = async () => {
+      try {
+        const { error: signOutError } = await supabase.auth.signOut();
+        if (signOutError) throw signOutError;
+        navigate("/");
+      } catch (err) {
+        console.error("サインアウト中にエラーが発生しました:", err);
+        setError(err);
+      }
+    };
+    const Header: React.FC = () => {
+      return (
+        <>
+          <header className="header">
+              <Link to="/dashboard"><h1 className="bold">Music Pitch Finder</h1></Link>
+              <nav className="flex_container">
+                <ul className="nav-links">
+                  <li>
+                    <Link to="/UI_page2"><button className="button_hover">➕</button></Link>
+                  </li>
+                  <li>
+                    <Link to="/UI_page3"><button className="button_hover">🎶</button></Link>
+                  </li>
+                  <li>
+                    <button onClick={signOut} className="button_hover">Sign out</button>
+                  </li>
+                </ul>
+              </nav>
+            </header>
+            <div className="main_container">
+              <div className="app-container">
+                <div className="main-content">
+                  <div className="inputs-grid">
+                    <FileInputBox title="原曲" onFileSelect={handleOriginalFile} />
+                    <FileInputBox title="カバー楽曲" onFileSelect={handleCoverFile} />
+                  </div>
 
-        <div className="results-area">
-          <button className="compare-button">
-            比較する
-          </button>
-          <div className="result-box">
-            <h3 className="result-title">キーの差</h3>
-            <div className="result-display">-</div>
+                <div className="results-area">
+                  <button className="compare-button">
+                    比較する
+                  </button>
+                  <div className="result-box">
+                    <h3 className="result-title">キーの差</h3>
+                    <div className="result-display">-</div>
+                  </div>
+                  <div className="result-box">
+                    <h3 className="result-title">おすすめキー</h3>
+                    <div className="result-display">-</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="result-box">
-            <h3 className="result-title">おすすめキー</h3>
-            <div className="result-display">-</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+        </>
+      );
+    }
+    return <Header />;
+  }
