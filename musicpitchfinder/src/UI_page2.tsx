@@ -244,7 +244,7 @@ export default function UI_page2() {
   return (
     <>
       <header className="header">
-        <Link to="/dashboard"><h1 className="bold">Music Pitch Finder</h1></Link>
+        <Link to="/dashboard"><h1 className="bold">Singalyzer</h1></Link>
         <nav className="flex_container">
           <ul className="nav-links">
             <li><Link to="/UI_page2"><button className="button_hover">➕</button></Link></li>

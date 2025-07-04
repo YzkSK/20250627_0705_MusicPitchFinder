@@ -196,7 +196,7 @@ export default function UI_page3() {
   return (
     <>
       <header className="header">
-        <Link to="/dashboard"><h1 className="bold">Music Pitch Finder</h1></Link>
+        <Link to="/dashboard"><h1 className="bold">Singalyzer</h1></Link>
         <nav className="flex_container">
           <ul className="nav-links">
             {/* ▼▼▼【変更】ヘッダーから音域表示を削除 ▼▼▼ */}
