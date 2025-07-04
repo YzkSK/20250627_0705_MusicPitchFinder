@@ -24,7 +24,7 @@ function Wrapper({ children }: React.PropsWithChildren<{}>) {
     if (authenticated) {
       return <>{children}</>;
     }
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 }
 
