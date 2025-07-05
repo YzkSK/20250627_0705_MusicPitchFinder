@@ -74,7 +74,7 @@ function Dashboard() {
       return (
         <>
           <header className="header">
-            <Link to="/dashboard"><h1 className="bold">Music Pitch Finder</h1></Link>
+            <Link to="/dashboard"><h1 className="bold">Singalyzer</h1></Link>
             <nav className="flex_container">
               <ul className="nav-links">
                 <li>
